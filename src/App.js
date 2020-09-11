@@ -1,17 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import Map from './features/map/Map';
-import './assets/styles/app.scss';
+// import { Counter } from './features/counter/Counter';
+
+import MapList from './sections/mapList/MapList';
 
 function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <Counter />
-                <Map />
+                {/* <Counter /> */}
             </header>
+            <main>
+                <div className="main-content">
+                    <MapList />
+                </div>
+            </main>
         </div>
     );
 }
