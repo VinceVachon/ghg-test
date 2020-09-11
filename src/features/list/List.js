@@ -27,13 +27,16 @@ const ListSection = (props) => {
     return (
         <div className="list-section-container">
             {observations && observations.map((observation, i) => {
-                return <ListItem
-                    key={i}
-                    activeObservable={activeObservable}
-                    observation={observation}
-                    setObservable={setObservable}
-                    itemIndex={i}
-                />
+                if (observation.visible !== false) {
+                    return <ListItem
+                        key={i}
+                        activeObservable={activeObservable}
+                        observation={observation}
+                        setObservable={setObservable}
+                        itemIndex={i}
+                    />
+                }
+                return false;
             })}
 
             <div className="back-to-top-container">

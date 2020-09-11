@@ -53,26 +53,29 @@ const MapSection = (props) => {
                         zoomOffset={-1}
                     />
                     {observations && observations.map((observation, i) => {
-                        const { properties } = observation;
-                        const date = timeConverter(properties.observed_on); // TODO: Render nice date formatting
-                        const coords = convertToLatLng(observation.geometry.coordinates, 1) // https://macwright.com/lonlat/
+                        if (observation.visible !== false) {
 
-                        if (coords) {
-                            return (
-                                <Polygon
-                                    key={observation.properties.description}
-                                    className={observation.properties.sensor}
-                                    id={i}
-                                    positions={coords}
-                                    onclick={() => setObservable(i)}
-                                >
-                                    <Popup className="map-observation-popup">
-                                        <p className="description">{properties.description}</p>
-                                        <p className="sensor">Sensor: {properties.sensor}</p>
-                                        <p className="observed">Observed on: {date}</p>
-                                    </Popup>
-                                </Polygon>
-                            )
+                            const { properties } = observation;
+                            const date = timeConverter(properties.observed_on); // TODO: Render nice date formatting
+                            const coords = convertToLatLng(observation.geometry.coordinates, 1) // https://macwright.com/lonlat/
+
+                            if (coords) {
+                                return (
+                                    <Polygon
+                                        key={observation.properties.description}
+                                        className={observation.properties.sensor}
+                                        id={i}
+                                        positions={coords}
+                                        onclick={() => setObservable(i)}
+                                    >
+                                        <Popup className="map-observation-popup">
+                                            <p className="description">{properties.description}</p>
+                                            <p className="sensor">Sensor: {properties.sensor}</p>
+                                            <p className="observed">Observed on: {date}</p>
+                                        </Popup>
+                                    </Polygon>
+                                )
+                            }
                         }
                         return false;
                     })}

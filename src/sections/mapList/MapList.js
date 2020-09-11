@@ -23,10 +23,14 @@ const MapList = () => {
 
         // If sensor is set to ALL, set the default data
         if (sensor === ALL) {
-            filteredData = observationsData.features;
+            filteredData = useFilteredObservations.map(observable => {
+                observable.visible = true;
+                return observable;
+            })
         } else {
-            filteredData = observationsData.features.filter(observable => {
-                return observable.properties.sensor === sensor;
+            filteredData = useFilteredObservations.map(observable => {
+                observable.visible = observable.properties.sensor === sensor;
+                return observable;
             })
         }
 
@@ -37,12 +41,17 @@ const MapList = () => {
     function setDescriptionFilter(descritpionValue) {
         let filteredData = [];
 
-        // If no description, set the default data
+        // If no description or 2 or less characters, set the default data
         if (descritpionValue === "" || descritpionValue.length <= 2) {
             filteredData = observationsData.features;
         } else {
-            filteredData = observationsData.features.filter(observable => {
-                return observable.properties.description.toLowerCase().indexOf(descritpionValue.toLowerCase()) !== -1;
+            filteredData = useFilteredObservations.map(observable => {
+                if (observable.properties.description.toLowerCase().indexOf(descritpionValue.toLowerCase()) !== -1) {
+                    observable.visible = true;
+                } else {
+                    observable.visible = false;
+                }
+                return observable;
             })
         }
 
