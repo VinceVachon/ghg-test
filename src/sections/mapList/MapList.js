@@ -23,7 +23,7 @@ const MapList = () => {
     useEffect(() => {
         filter();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [useActiveFilters, useSensorFilterValue, useDescriptionFilterValue])
+    }, [useSensorFilterValue, useDescriptionFilterValue])
 
     // Filter results with selected sensor
     function setSensorFilter(sensor) {
@@ -54,6 +54,10 @@ const MapList = () => {
         setActiveFilters(filters)
     }
 
+
+    // Filter results with multiple criterias
+    // Description
+    // Sensor
     function filter() {
         let filteredData = [];
 
@@ -67,6 +71,7 @@ const MapList = () => {
                 return observable;
             })
         } else {
+            // Set all to true
             filteredData = observationsData.features.map(observable => {
                 observable.visible = true;
                 return observable;

@@ -24,20 +24,26 @@ const ListSection = (props) => {
         }
     }
 
+    const noResults = observations && observations.length > 0 && observations.every(observation => observation.visible === false)
+
     return (
         <div className="list-section-container">
-            {observations && observations.map((observation, i) => {
-                if (observation.visible !== false) {
-                    return <ListItem
-                        key={i}
-                        activeObservable={activeObservable}
-                        observation={observation}
-                        setObservable={setObservable}
-                        itemIndex={i}
-                    />
-                }
-                return false;
-            })}
+            {noResults ?
+                <p className="no-results">No Results</p>
+                : observations && observations.length > 0 &&
+                observations.map((observation, i) => {
+                    if (observation.visible !== false) {
+                        return <ListItem
+                            key={i}
+                            activeObservable={activeObservable}
+                            observation={observation}
+                            setObservable={setObservable}
+                            itemIndex={i}
+                        />
+                    }
+                    return false;
+                })
+            }
 
             <div className="back-to-top-container">
                 <button onClick={() => window.scrollTo(0, 0)} className="button primary back-to-top">Back to Top</button>
