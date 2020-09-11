@@ -23,7 +23,10 @@ const ListSection = (props) => {
 
     return (
         <div className="list-section-container">
-            <h1>Observations</h1>
+            <header className="list-section-header">
+                <h1>Observations</h1>
+                <p>{observations.length} Result{observations.length !== 1 ? 's' : ''}</p>
+            </header>
 
             {observations && observations.map((observation, i) => {
                 // if (i <= 100) {
@@ -33,12 +36,18 @@ const ListSection = (props) => {
                 return (
                     <div onClick={() => setObservable(i)} key={observation.properties.description} id={`observable-id-${i}`} className={`list-item-content ${activeObservable === i ? 'active' : ''}`}>
                         <p className="description">{properties.description}</p>
-                        <p className="sensor">Sensor: {properties.sensor}</p>
-                        <p className="observed">Observed on: {date}</p>
+                        <div className="item-info">
+                            <p className={`sensor-pill ${properties.sensor}`}><span className="sensor-name">{properties.sensor}</span></p>
+                            <p className="observed">{date}</p>
+                        </div>
                     </div>
                 )
                 // }
             })}
+
+            <div className="back-to-top-container">
+                <button onClick={() => window.scrollTo(0, 0)} className="button primary back-to-top">Back to Top</button>
+            </div>
         </div>
     );
 }

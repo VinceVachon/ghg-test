@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Map, Popup, WMSTileLayer, Polygon } from 'react-leaflet';
-import { convertToLatLng, timeConverter } from '../../app/utils';
+import { convertToLatLng, getCenterOfPolygon, timeConverter } from '../../app/utils';
 import { mapBoxAccessToken } from '../../app/envConstants';
+import { COLORPRIMARY } from '../../app/constants';
 
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -20,8 +21,7 @@ const MapSection = (props) => {
 
     useEffect(() => {
         // When selecting an observable on the map or the list
-        // Get the first coord. of the first array of the active feature geometry element
-        // TODO: Optimize, get the center of the polygon based on the arrays/coords
+        // Center the map based on the selected coords
         // Data sanity check
         if (
             activeObservable &&
@@ -33,10 +33,13 @@ const MapSection = (props) => {
             observations[activeObservable].geometry.coordinates[0] &&
             observations[activeObservable].geometry.coordinates[0][0]
         ) {
-            const selectedObservableCenter = convertToLatLng(observations[activeObservable].geometry.coordinates[0][0]);
-            setCenterPosition(selectedObservableCenter)
+            const selectedObservableCoords = observations[activeObservable].geometry.coordinates[0];
+            const selectedObservableCenter = getCenterOfPolygon(selectedObservableCoords);
+            const selectedObservableLatLng = convertToLatLng(selectedObservableCenter);
+            setCenterPosition(selectedObservableLatLng)
         }
     }, [activeObservable])
+
 
     if (useObservables) {
         return (
@@ -60,7 +63,8 @@ const MapSection = (props) => {
                             return (
                                 <Polygon
                                     key={observation.properties.description}
-                                    color={activeObservable === i ? 'red' : 'blue'}
+                                    // color={activeObservable === i ? 'red' : COLORPRIMARY}
+                                    className={observation.properties.sensor}
                                     id={i}
                                     positions={coords}
                                     onclick={() => setObservable(i)}

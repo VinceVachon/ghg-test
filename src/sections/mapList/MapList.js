@@ -13,6 +13,7 @@ import './MapList.scss';
 const MapList = () => {
     const [useLoading, setLoading] = useState(false);
     const [useActiveObservable, setActiveObservable] = useState(undefined);
+    const [useZoomLevel, setZoomLevel] = useState(3);
     const [useFilteredObservations, setFilteredObservations] = useState(observationsData.features);
 
     console.log(observationsData);
@@ -31,31 +32,38 @@ const MapList = () => {
         setFilteredObservations(filteredData);
     }
 
+    function handleActiveObservableSelection(id) {
+        setActiveObservable(id)
+        setZoomLevel(8)
+    }
+
     return (
         <React.Fragment>
-            <div className="filters-container">
-                <Filters
-                    setSensorFilter={setSensorFilter}
-                    activeObservable={useActiveObservable}
-                    observations={useFilteredObservations}
-                    observationsData={observationsData}
-                />
-            </div>
             {useLoading ?
                 <p>Loading...</p>
                 :
                 <React.Fragment>
                     <div className="map-list-container">
+                        <div className="filter-list-container">
+                            <div className="filters-container">
+                                <Filters
+                                    setSensorFilter={setSensorFilter}
+                                    activeObservable={useActiveObservable}
+                                    observations={useFilteredObservations}
+                                    observationsData={observationsData}
+                                />
+                            </div>
+                            <ListSection
+                                activeObservable={useActiveObservable}
+                                setObservable={handleActiveObservableSelection}
+                                observations={useFilteredObservations}
+                            />
+                        </div>
                         <MapSection
                             activeObservable={useActiveObservable}
-                            setObservable={setActiveObservable}
+                            setObservable={handleActiveObservableSelection}
                             observations={useFilteredObservations}
-                            zoomLevel={3}
-                        />
-                        <ListSection
-                            activeObservable={useActiveObservable}
-                            setObservable={setActiveObservable}
-                            observations={useFilteredObservations}
+                            zoomLevel={useZoomLevel}
                         />
                     </div>
                 </React.Fragment>

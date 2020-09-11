@@ -1,27 +1,85 @@
 @import '../../assets/styles/variables';
+@import '../../assets/styles/mixins';
 
 .list-section-container {
     width: 100%;
-    max-width: 50%;
 
-    padding: 20px;
+    .list-section-header {
+        padding: 1em;
 
-    .list-item-content {
-        margin-bottom: 1em;
-        padding-bottom: 1em;
-        border-bottom: 1px solid silver;
-
-        &.active {
-            background-color: blue;
+        h1 {
+            margin-bottom: 0.5rem;
         }
 
         p {
             font-size: 14px;
-            margin-bottom: 5px;
+        }
+    }
+
+    .list-item-content {
+        padding: 1.5em 1em;
+        border-bottom: 1px solid silver;
+        border-left: 3px solid transparent;
+
+        &:hover {
+            background-color: $color-blue-pale;
+            cursor: pointer;
+        }
+
+        &.active {
+            background-color: $color-blue-pale;
+            border-left: 3px solid $color-blue;
         }
 
         .description {
+            margin-bottom: 1.5em;
             font-weight: $font-weight-bold;
         }
+
+        .item-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .sensor-pill {
+                padding: 0.5em 1em;
+
+                font-size: 12px;
+
+                background-color: $color-blue-light;
+                color: $color-white;
+
+                border-radius: 999px;
+
+                filter: drop-shadow(0 2px 1px #aaa);
+
+                @include sensorColors;
+
+                .sensor-name {
+                    color: $color-white;
+                }
+
+            }
+
+            .observed {
+                font-size: 14px;
+                text-align: right;
+            }
+        }
     }
+
+
+    .back-to-top-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        padding: 1em;
+
+        background-color: rgba($color-white, 0.88);
+
+        box-shadow: 0 -2px 3px 0 #aaa;
+    }
+
 }

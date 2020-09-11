@@ -1,0 +1,29 @@
+@mixin sensorColors {
+    &.GHGSat-C1 {
+        color: $color-blue-light;
+        background-color: currentColor;
+        stroke: currentColor;
+        fill: currentColor;
+    }
+
+    &.GHGSat-C2 {
+        color: $color-blue-purple;
+        background-color: currentColor;
+        stroke: currentColor;
+        fill: currentColor;
+    }
+
+    &.GHGSat-C3 {
+        color: $color-grape;
+        background-color: currentColor;
+        stroke: currentColor;
+        fill: currentColor;
+    }
+
+    &.GHGSat-D {
+        color: $color-pink;
+        background-color: currentColor;
+        stroke: currentColor;
+        fill: currentColor;
+    }
+}

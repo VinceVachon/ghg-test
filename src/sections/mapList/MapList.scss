@@ -1,3 +1,7 @@
 .map-list-container {
     display: flex;
+
+    .filter-list-container {
+        max-width: 40%;
+    }
 }
