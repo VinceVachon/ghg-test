@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 
-import { getOffset, timeConverter } from '../../app/utils';
+import { getOffset } from '../../app/utils';
+
+import ListItem from './listItem/ListItem';
 
 import './List.scss';
 
@@ -9,6 +11,7 @@ const ListSection = (props) => {
 
     useEffect(() => {
         scrollToActiveObservable();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeObservable])
 
     function scrollToActiveObservable() {
@@ -24,20 +27,13 @@ const ListSection = (props) => {
     return (
         <div className="list-section-container">
             {observations && observations.map((observation, i) => {
-                // if (i <= 100) {
-                const { properties } = observation;
-                const date = timeConverter(properties.observed_on);
-
-                return (
-                    <div onClick={() => setObservable(i)} key={observation.properties.description} id={`observable-id-${i}`} className={`list-item-content ${activeObservable === i ? 'active' : ''}`}>
-                        <p className="description">{properties.description}</p>
-                        <div className="item-info">
-                            <p className={`sensor-pill ${properties.sensor}`}><span className="sensor-name">{properties.sensor}</span></p>
-                            <p className="observed">{date}</p>
-                        </div>
-                    </div>
-                )
-                // }
+                return <ListItem
+                    key={i}
+                    activeObservable={activeObservable}
+                    observation={observation}
+                    setObservable={setObservable}
+                    itemIndex={i}
+                />
             })}
 
             <div className="back-to-top-container">

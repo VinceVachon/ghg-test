@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Map, Popup, WMSTileLayer, Polygon } from 'react-leaflet';
 import { convertToLatLng, getCenterOfPolygon, timeConverter } from '../../app/utils';
 import { mapBoxAccessToken } from '../../app/envConstants';
-import { COLORPRIMARY } from '../../app/constants';
 
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -11,7 +10,7 @@ import './Map.scss';
 const MapSection = (props) => {
     const { activeObservable, observations, setObservable, zoomLevel } = props;
     const [useObservables, setObservables] = useState(undefined)
-    const defaultCenter = observations && convertToLatLng(observations && observations.length > 0 && observations[0].geometry.coordinates[0][0]);
+    const defaultCenter = observations && observations.length > 0 && convertToLatLng(observations[0].geometry.coordinates[0][0]);
     const [useCenterPosition, setCenterPosition] = useState(defaultCenter)
 
     useEffect(() => {
@@ -38,6 +37,7 @@ const MapSection = (props) => {
             const selectedObservableLatLng = convertToLatLng(selectedObservableCenter);
             setCenterPosition(selectedObservableLatLng)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeObservable])
 
 
@@ -45,25 +45,22 @@ const MapSection = (props) => {
         return (
             <div className="map-section-container">
                 <Map center={useCenterPosition} zoom={zoomLevel}>
-                    {/* mapbox tyles style */}
                     <WMSTileLayer
-                        url={`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapBoxAccessToken}`}
+                        url={`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapBoxAccessToken}`} // mapbox tyles style
                         id="mapbox/satellite-v9"
                         layers='nexrad-n0r-900913'
                         tileSize={512}
                         zoomOffset={-1}
                     />
                     {observations && observations.map((observation, i) => {
-                        // if (i <= 100) {
                         const { properties } = observation;
-                        const date = timeConverter(properties.observed_on);
+                        const date = timeConverter(properties.observed_on); // TODO: Render nice date formatting
                         const coords = convertToLatLng(observation.geometry.coordinates, 1) // https://macwright.com/lonlat/
 
                         if (coords) {
                             return (
                                 <Polygon
                                     key={observation.properties.description}
-                                    // color={activeObservable === i ? 'red' : COLORPRIMARY}
                                     className={observation.properties.sensor}
                                     id={i}
                                     positions={coords}
@@ -77,7 +74,6 @@ const MapSection = (props) => {
                                 </Polygon>
                             )
                         }
-                        // }
                         return false;
                     })}
                 </Map>

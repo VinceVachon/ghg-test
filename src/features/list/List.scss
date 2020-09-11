@@ -3,58 +3,9 @@
 
 .list-section-container {
     width: 100%;
-
-    .list-item-content {
-        padding: 1.5em 1em;
-        border-bottom: 1px solid silver;
-        border-left: 3px solid transparent;
-
-        &:hover {
-            background-color: $color-blue-pale;
-            cursor: pointer;
-        }
-
-        &.active {
-            background-color: $color-blue-pale;
-            border-left: 3px solid $color-blue;
-        }
-
-        .description {
-            margin-bottom: 1.5em;
-            font-weight: $font-weight-bold;
-        }
-
-        .item-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            .sensor-pill {
-                padding: 0.5em 1em;
-
-                font-size: 12px;
-
-                background-color: $color-blue-light;
-                color: $color-white;
-
-                border-radius: 999px;
-
-                filter: drop-shadow(0 2px 1px #aaa);
-
-                @include sensorColors;
-
-                .sensor-name {
-                    color: $color-white;
-                }
-
-            }
-
-            .observed {
-                font-size: 14px;
-                text-align: right;
-            }
-        }
-    }
+    width: 100%;
+    max-width: 650px;
+    min-width: 400px;
 
     .back-to-top-container {
         position: fixed;

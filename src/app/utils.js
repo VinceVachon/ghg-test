@@ -37,7 +37,7 @@ export function getOffset(el) {
 // Leaflet provides differents function for single / multi-level arrays
 /**
  * 
- * @param {Array} coords
+ * @param {array} coords
  * @param {number} level 
  */
 export function convertToLatLng(coords, level) {

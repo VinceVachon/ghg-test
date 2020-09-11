@@ -37,6 +37,22 @@
             margin-bottom: 0;
             margin-left: 0.5em;
         }
+    }
 
+    .filters {
+        display: flex;
+        align-items: center;
+
+        .description-filter-input {
+            padding: 0.55em;
+            margin-right: 1em;
+            min-width: 300px;
+
+            background-color: #fafaff;
+
+            border: 1px solid $color-blue;
+
+            border-radius: 4px;
+        }
     }
 }

@@ -7,20 +7,23 @@ import { ALL } from '../../app/constants';
 import './Filters.scss';
 
 const Filters = (props) => {
-    const { activeObservable, observations, observationsData, setSensorFilter } = props;
+    const { observations, observationsData, setSensorFilter, setDescriptionFilter } = props;
     const allSensorFilter = {
         value: ALL,
         label: 'All Sensors',
     };
+    const [useDescriptionValue, setDescriptionValue] = useState(undefined);
     const [useSensorOptions, setSensorOptions] = useState(undefined);
     const [useSelectedSensor, setSelectedSensor] = useState(allSensorFilter);
 
     useEffect(() => {
         createSensorOptions()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [observations])
 
     // Generare a list of unique sensors
     // Create array of object for options base on unique sensors
+    // Could also use new Set()
     function createSensorOptions() {
         const sensorOptions = [];
 
@@ -37,7 +40,6 @@ const Filters = (props) => {
         })
 
         sensorOptions.unshift(allSensorFilter);
-
         setSensorOptions(sensorOptions);
     }
 
@@ -47,6 +49,11 @@ const Filters = (props) => {
         setSensorFilter(selectedSensorOption.value)
     }
 
+    function handleDescriptionFilterChanger(e) {
+        setDescriptionValue(e.target.value);
+        setDescriptionFilter(e.target.value)
+    }
+
     return (
         <div className="filters-section-container">
             <header className="filters-section-header">
@@ -54,15 +61,24 @@ const Filters = (props) => {
                 <p>({observations.length} Result{observations.length !== 1 ? 's' : ''})</p>
             </header>
 
-            {useSensorOptions &&
-                <Select
-                    className="sensor-select"
-                    value={useSelectedSensor}
-                    onChange={e => handleFilterChanger(e)}
-                    options={useSensorOptions}
-                    styles={ghgSatDefault}
+            <div className="filters">
+                <input
+                    className="description-filter-input"
+                    type="search"
+                    onChange={e => handleDescriptionFilterChanger(e)}
+                    value={useDescriptionValue}
+                    placeholder="Filter by Description"
                 />
-            }
+                {useSensorOptions &&
+                    <Select
+                        className="sensor-select"
+                        value={useSelectedSensor}
+                        onChange={e => handleFilterChanger(e)}
+                        options={useSensorOptions}
+                        styles={ghgSatDefault}
+                    />
+                }
+            </div>
         </div>
     );
 }

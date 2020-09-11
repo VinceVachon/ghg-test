@@ -37,13 +37,13 @@ export const ghgSatDefault = {
                 colors.white :
                 colors.text,
             backgroundColor:
-                    (state.isFocused && state.isSelected) ?
+                (state.isFocused && state.isSelected) ?
+                    colors.blueLight :
+                    state.isFocused ?
                         colors.blueLight :
-                        state.isFocused ?
+                        state.isSelected ?
                             colors.blueLight :
-                            state.isSelected ?
-                                colors.blueLight :
-                                colors.bluePale,
+                            colors.bluePale,
             fontSize: '14px',
             transition: 'all 100ms',
             fontFamily: "Roboto",

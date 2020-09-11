@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './TopBar.scss';
 
 const MapList = () => {
-    const [useLoading, setLoading] = useState(false);
-
     return (
         <div className="top-bar-container">
             <div className="top-bar">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import observationsData from '../../assets/data/observations.json';
 
@@ -11,16 +11,17 @@ import Filters from '../../features/filters/Filters';
 import './MapList.scss';
 
 const MapList = () => {
-    const [useLoading, setLoading] = useState(false);
     const [useActiveObservable, setActiveObservable] = useState(undefined);
     const [useZoomLevel, setZoomLevel] = useState(6);
     const [useFilteredObservations, setFilteredObservations] = useState(observationsData.features);
 
     console.log(observationsData);
 
+    // Filter results with selected sensor
     function setSensorFilter(sensor) {
         let filteredData = [];
 
+        // If sensor is set to ALL, set the default data
         if (sensor === ALL) {
             filteredData = observationsData.features;
         } else {
@@ -32,6 +33,23 @@ const MapList = () => {
         setFilteredObservations(filteredData);
     }
 
+    // TODO: optimize with a Debounce function
+    function setDescriptionFilter(descritpionValue) {
+        let filteredData = [];
+
+        // If no description, set the default data
+        if (descritpionValue === "" || descritpionValue.length <= 2) {
+            filteredData = observationsData.features;
+        } else {
+            filteredData = observationsData.features.filter(observable => {
+                return observable.properties.description.toLowerCase().indexOf(descritpionValue.toLowerCase()) !== -1;
+            })
+        }
+
+        setFilteredObservations(filteredData);
+    }
+
+    // Set the selected id of the clicked observable
     function handleActiveObservableSelection(id) {
         setActiveObservable(id)
         setZoomLevel(8)
@@ -39,35 +57,28 @@ const MapList = () => {
 
     return (
         <React.Fragment>
-            {useLoading ?
-                <p>Loading...</p>
-                :
-                <React.Fragment>
-                    <div className="filters-container">
-                        <Filters
-                            setSensorFilter={setSensorFilter}
-                            activeObservable={useActiveObservable}
-                            observations={useFilteredObservations}
-                            observationsData={observationsData}
-                        />
-                    </div>
-                    <div className="map-list-container">
-                        <div className="filter-list-container">
-                            <ListSection
-                                activeObservable={useActiveObservable}
-                                setObservable={handleActiveObservableSelection}
-                                observations={useFilteredObservations}
-                            />
-                        </div>
-                        <MapSection
-                            activeObservable={useActiveObservable}
-                            setObservable={handleActiveObservableSelection}
-                            observations={useFilteredObservations}
-                            zoomLevel={useZoomLevel}
-                        />
-                    </div>
-                </React.Fragment>
-            }
+            <div className="filters-container">
+                <Filters
+                    setSensorFilter={setSensorFilter}
+                    setDescriptionFilter={setDescriptionFilter}
+                    activeObservable={useActiveObservable}
+                    observations={useFilteredObservations}
+                    observationsData={observationsData}
+                />
+            </div>
+            <div className="map-list-container">
+                <ListSection
+                    activeObservable={useActiveObservable}
+                    setObservable={handleActiveObservableSelection}
+                    observations={useFilteredObservations}
+                />
+                <MapSection
+                    activeObservable={useActiveObservable}
+                    setObservable={handleActiveObservableSelection}
+                    observations={useFilteredObservations}
+                    zoomLevel={useZoomLevel}
+                />
+            </div>
         </React.Fragment>
     );
 }
