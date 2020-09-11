@@ -26,6 +26,7 @@ const MapList = () => {
     }, [useSensorFilterValue, useDescriptionFilterValue])
 
     // Filter results with selected sensor
+    // This could go in the redux store if we want to keep filters between pages
     function setSensorFilter(sensor) {
         let filters = useActiveFilters;
 
@@ -61,6 +62,7 @@ const MapList = () => {
         let filteredData = [];
 
         if (useActiveFilters.description) {
+            // Find description text in all items based on the user input text
             filteredData = observationsData.features.map(observable => {
                 if (observable.properties.description.toLowerCase().indexOf(useDescriptionFilterValue.toLowerCase()) !== -1) {
                     observable.visible = true;
@@ -77,6 +79,7 @@ const MapList = () => {
             })
         }
 
+        // Check for selected sensor in all items
         if (useActiveFilters.sensor) {
             filteredData = observationsData.features.map(observable => {
                 if (observable.visible !== false) {

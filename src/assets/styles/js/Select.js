@@ -1,13 +1,3 @@
-// $color-blue:#2B62AE;
-// $color-blue-light:#428bca;
-// $color-blue-pale:#dbe1f2;
-// $color-blue-purple: #4542CA;
-// $color-pink: #A8389F;
-// $color-grape: #9542CA;
-// $color-white:#ffffff;
-// $color-grey-dark: #2E2D30;
-
-
 const colors = {
     white: "#ffffff",
     blueLight: "#428bca",

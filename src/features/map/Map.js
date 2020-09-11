@@ -40,7 +40,6 @@ const MapSection = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeObservable])
 
-
     return (
         <div className="map-section-container">
             {useObservables ?

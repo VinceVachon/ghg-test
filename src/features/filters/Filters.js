@@ -29,6 +29,7 @@ const Filters = (props) => {
     const [useSensorOptions, setSensorOptions] = useState(undefined);
     const [useSelectedSensor, setSelectedSensor] = useState(allSensorFilter);
 
+    // Update options if observations data changes (simulation)
     useEffect(() => {
         createSensorOptions()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,19 +57,22 @@ const Filters = (props) => {
         setSensorOptions(sensorOptions);
     }
 
-    function handleFilterChanger(selectedOption) {
+    // Change sensor select
+    function handleSensorOptionChange(selectedOption) {
         const selectedSensorOption = selectedOption;
         setSelectedSensor(selectedSensorOption);
         setSensorFilter(selectedSensorOption.value)
     }
 
+    // Change description input
     function handleDescriptionFilterChanger(value) {
         setDescriptionValue(value);
         setDescriptionFilter(value)
     }
 
+    // Create an array of visible results to get the lenght
+    // TODO: Optimize this function
     const visibleResults = []
-
     observations.forEach(observation => {
         if (observation.visible !== false) {
             visibleResults.push(observation)
@@ -94,7 +98,7 @@ const Filters = (props) => {
                     <Select
                         className="sensor-select"
                         value={useSelectedSensor}
-                        onChange={e => handleFilterChanger(e)}
+                        onChange={e => handleSensorOptionChange(e)}
                         options={useSensorOptions}
                         styles={ghgSatDefault}
                     />

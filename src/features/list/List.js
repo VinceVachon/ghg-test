@@ -14,6 +14,8 @@ const ListSection = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeObservable])
 
+
+    // Scroll in page to the active/selected observable in the list
     function scrollToActiveObservable() {
         if (activeObservable) {
             const activeObservableElement = document.getElementById(`observable-id-${activeObservable}`);
@@ -24,13 +26,13 @@ const ListSection = (props) => {
         }
     }
 
-    const noResults = observations && observations.length > 0 && observations.every(observation => observation.visible === false)
+    // Check if at least one item is visible
+    const hasResult = observations && observations.length > 0 && observations.some(observation => observation.visible === true)
 
     return (
         <div className="list-section-container">
-            {noResults ?
-                <p className="no-results">No Results</p>
-                : observations && observations.length > 0 &&
+            {hasResult ?
+                observations && observations.length > 0 &&
                 observations.map((observation, i) => {
                     if (observation.visible !== false) {
                         return <ListItem
@@ -43,6 +45,8 @@ const ListSection = (props) => {
                     }
                     return false;
                 })
+                :
+                <p className="no-results">No Results</p>
             }
 
             <div className="back-to-top-container">
