@@ -53,4 +53,10 @@
 
         @include sensorColors;
     }
+
+    .map-loading {
+        position: absolute;
+        left: 50%;
+        top: 300px;
+    }
 }

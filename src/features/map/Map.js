@@ -41,9 +41,9 @@ const MapSection = (props) => {
     }, [activeObservable])
 
 
-    if (useObservables) {
-        return (
-            <div className="map-section-container">
+    return (
+        <div className="map-section-container">
+            {useObservables ?
                 <Map center={useCenterPosition} zoom={zoomLevel}>
                     <WMSTileLayer
                         url={`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapBoxAccessToken}`} // mapbox tyles style
@@ -54,7 +54,6 @@ const MapSection = (props) => {
                     />
                     {observations && observations.map((observation, i) => {
                         if (observation.visible !== false) {
-
                             const { properties } = observation;
                             const date = timeConverter(properties.observed_on); // TODO: Render nice date formatting
                             const coords = convertToLatLng(observation.geometry.coordinates, 1) // https://macwright.com/lonlat/
@@ -80,10 +79,10 @@ const MapSection = (props) => {
                         return false;
                     })}
                 </Map>
-            </div>
-        );
-    }
-    return <p>Loading...</p>
+                : <p className="map-loading">Loading...</p>
+            }
+        </div>
+    );
 }
 
 export default MapSection;

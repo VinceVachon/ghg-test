@@ -39,7 +39,6 @@ const MapList = () => {
         setActiveFilters(filters);
     }
 
-    // TODO: optimize with a Debounce function
     function setDescriptionFilter(descritpionValue) {
         let filters = useActiveFilters;
 

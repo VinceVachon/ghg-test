@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select'
+import { useDebouncedCallback } from 'use-debounce';
 
 import { ghgSatDefault } from '../../assets/styles/js/Select';
 import { ALL } from '../../app/constants';
@@ -12,7 +13,19 @@ const Filters = (props) => {
         value: ALL,
         label: 'All Sensors',
     };
+
     const [useDescriptionValue, setDescriptionValue] = useState('');
+
+    // Debounce callback
+    const [debouncedCallback] = useDebouncedCallback(
+        // function
+        (useDescriptionValue) => {
+            handleDescriptionFilterChanger(useDescriptionValue);
+        },
+        // delay in ms
+        500
+    );
+
     const [useSensorOptions, setSensorOptions] = useState(undefined);
     const [useSelectedSensor, setSelectedSensor] = useState(allSensorFilter);
 
@@ -49,9 +62,9 @@ const Filters = (props) => {
         setSensorFilter(selectedSensorOption.value)
     }
 
-    function handleDescriptionFilterChanger(e) {
-        setDescriptionValue(e.target.value);
-        setDescriptionFilter(e.target.value)
+    function handleDescriptionFilterChanger(value) {
+        setDescriptionValue(value);
+        setDescriptionFilter(value)
     }
 
     const visibleResults = []
@@ -73,8 +86,8 @@ const Filters = (props) => {
                 <input
                     className="description-filter-input"
                     type="search"
-                    onChange={e => handleDescriptionFilterChanger(e)}
-                    value={useDescriptionValue}
+                    onChange={e => debouncedCallback(e.target.value)}
+                    defaultValue={useDescriptionValue}
                     placeholder="Filter by Description"
                 />
                 {useSensorOptions &&
