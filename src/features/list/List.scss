@@ -4,18 +4,6 @@
 .list-section-container {
     width: 100%;
 
-    .list-section-header {
-        padding: 1em;
-
-        h1 {
-            margin-bottom: 0.5rem;
-        }
-
-        p {
-            font-size: 14px;
-        }
-    }
-
     .list-item-content {
         padding: 1.5em 1em;
         border-bottom: 1px solid silver;
@@ -67,7 +55,6 @@
             }
         }
     }
-
 
     .back-to-top-container {
         position: fixed;

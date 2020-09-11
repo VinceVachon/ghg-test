@@ -13,7 +13,7 @@ import './MapList.scss';
 const MapList = () => {
     const [useLoading, setLoading] = useState(false);
     const [useActiveObservable, setActiveObservable] = useState(undefined);
-    const [useZoomLevel, setZoomLevel] = useState(3);
+    const [useZoomLevel, setZoomLevel] = useState(6);
     const [useFilteredObservations, setFilteredObservations] = useState(observationsData.features);
 
     console.log(observationsData);
@@ -43,16 +43,16 @@ const MapList = () => {
                 <p>Loading...</p>
                 :
                 <React.Fragment>
+                    <div className="filters-container">
+                        <Filters
+                            setSensorFilter={setSensorFilter}
+                            activeObservable={useActiveObservable}
+                            observations={useFilteredObservations}
+                            observationsData={observationsData}
+                        />
+                    </div>
                     <div className="map-list-container">
                         <div className="filter-list-container">
-                            <div className="filters-container">
-                                <Filters
-                                    setSensorFilter={setSensorFilter}
-                                    activeObservable={useActiveObservable}
-                                    observations={useFilteredObservations}
-                                    observationsData={observationsData}
-                                />
-                            </div>
                             <ListSection
                                 activeObservable={useActiveObservable}
                                 setObservable={handleActiveObservableSelection}

@@ -23,11 +23,6 @@ const ListSection = (props) => {
 
     return (
         <div className="list-section-container">
-            <header className="list-section-header">
-                <h1>Observations</h1>
-                <p>{observations.length} Result{observations.length !== 1 ? 's' : ''}</p>
-            </header>
-
             {observations && observations.map((observation, i) => {
                 // if (i <= 100) {
                 const { properties } = observation;
