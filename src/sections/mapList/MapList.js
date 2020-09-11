@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import observationsData from '../../assets/data/observations.json';
 
@@ -15,47 +15,75 @@ const MapList = () => {
     const [useZoomLevel, setZoomLevel] = useState(6);
     const [useFilteredObservations, setFilteredObservations] = useState(observationsData.features);
 
-    console.log(observationsData);
+    const [useActiveFilters, setActiveFilters] = useState({});
+
+    const [useDescriptionFilterValue, setDescriptionFilterValue] = useState();
+    const [useSensorFilterValue, setSensorFilterValue] = useState(ALL);
+
+    useEffect(() => {
+        filter();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [useActiveFilters, useSensorFilterValue, useDescriptionFilterValue])
 
     // Filter results with selected sensor
     function setSensorFilter(sensor) {
-        let filteredData = [];
+        let filters = useActiveFilters;
 
-        // If sensor is set to ALL, set the default data
         if (sensor === ALL) {
-            filteredData = useFilteredObservations.map(observable => {
-                observable.visible = true;
-                return observable;
-            })
+            filters['sensor'] = false;
         } else {
-            filteredData = useFilteredObservations.map(observable => {
-                observable.visible = observable.properties.sensor === sensor;
-                return observable;
-            })
+            filters['sensor'] = true;
         }
 
-        setFilteredObservations(filteredData);
+        setSensorFilterValue(sensor);
+        setActiveFilters(filters);
     }
 
     // TODO: optimize with a Debounce function
     function setDescriptionFilter(descritpionValue) {
+        let filters = useActiveFilters;
+
+        // // If no description or 2 or less characters, set the default data
+        if (descritpionValue === "" || descritpionValue.length <= 2) {
+            filters['description'] = false;
+        } else {
+            filters['description'] = true;
+        }
+
+        setDescriptionFilterValue(descritpionValue)
+        setActiveFilters(filters)
+    }
+
+    function filter() {
         let filteredData = [];
 
-        // If no description or 2 or less characters, set the default data
-        if (descritpionValue === "" || descritpionValue.length <= 2) {
-            filteredData = observationsData.features;
-        } else {
-            filteredData = useFilteredObservations.map(observable => {
-                if (observable.properties.description.toLowerCase().indexOf(descritpionValue.toLowerCase()) !== -1) {
+        if (useActiveFilters.description) {
+            filteredData = observationsData.features.map(observable => {
+                if (observable.properties.description.toLowerCase().indexOf(useDescriptionFilterValue.toLowerCase()) !== -1) {
                     observable.visible = true;
                 } else {
                     observable.visible = false;
                 }
                 return observable;
             })
+        } else {
+            filteredData = observationsData.features.map(observable => {
+                observable.visible = true;
+                return observable;
+            })
         }
 
-        setFilteredObservations(filteredData);
+        if (useActiveFilters.sensor) {
+            filteredData = observationsData.features.map(observable => {
+                if (observable.visible !== false) {
+                    observable.visible = observable.properties.sensor === useSensorFilterValue;
+                }
+                return observable;
+            })
+        }
+
+        // extend the array to make sure it's new data and use effect is applied
+        setFilteredObservations([...filteredData]);
     }
 
     // Set the selected id of the clicked observable

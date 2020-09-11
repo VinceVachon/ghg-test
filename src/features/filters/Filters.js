@@ -12,7 +12,7 @@ const Filters = (props) => {
         value: ALL,
         label: 'All Sensors',
     };
-    const [useDescriptionValue, setDescriptionValue] = useState(undefined);
+    const [useDescriptionValue, setDescriptionValue] = useState('');
     const [useSensorOptions, setSensorOptions] = useState(undefined);
     const [useSelectedSensor, setSelectedSensor] = useState(allSensorFilter);
 
@@ -54,11 +54,19 @@ const Filters = (props) => {
         setDescriptionFilter(e.target.value)
     }
 
+    const visibleResults = []
+
+    observations.forEach(observation => {
+        if (observation.visible !== false) {
+            visibleResults.push(observation)
+        }
+    });
+
     return (
         <div className="filters-section-container">
             <header className="filters-section-header">
                 <h1>Methane Observations</h1>
-                <p>({observations.length} Result{observations.length !== 1 ? 's' : ''})</p>
+                <p>({visibleResults.length} Result{visibleResults.length !== 1 ? 's' : ''})</p>
             </header>
 
             <div className="filters">
