@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Map, Popup, WMSTileLayer, Polygon } from 'react-leaflet';
-
-import { timeConverter } from '../../app/utils';
+import { convertToLatLng, timeConverter } from '../../app/utils';
 import { mapBoxAccessToken } from '../../app/envConstants';
 
 import '../../../node_modules/leaflet/dist/leaflet.css';
@@ -9,18 +8,41 @@ import '../../../node_modules/leaflet/dist/leaflet.css';
 import './Map.scss';
 
 const MapSection = (props) => {
+    const { activeObservable, observations, setObservable, zoomLevel } = props;
     const [useObservables, setObservables] = useState(undefined)
-    const { activeObservable, observations, setObservable } = props;
-    const position = observations.features[0].geometry.coordinates[0][0];
+    const defaultCenter = observations && convertToLatLng(observations && observations.length > 0 && observations[0].geometry.coordinates[0][0]);
+    const [useCenterPosition, setCenterPosition] = useState(defaultCenter)
 
     useEffect(() => {
+        // Update the observations list from props
         setObservables(observations);
-    })
+    }, [observations])
+
+    useEffect(() => {
+        // When selecting an observable on the map or the list
+        // Get the first coord. of the first array of the active feature geometry element
+        // TODO: Optimize, get the center of the polygon based on the arrays/coords
+        // Data sanity check
+        if (
+            activeObservable &&
+            observations &&
+            observations &&
+            observations[activeObservable] &&
+            observations[activeObservable].geometry &&
+            observations[activeObservable].geometry.coordinates &&
+            observations[activeObservable].geometry.coordinates[0] &&
+            observations[activeObservable].geometry.coordinates[0][0]
+        ) {
+            const selectedObservableCenter = convertToLatLng(observations[activeObservable].geometry.coordinates[0][0]);
+            setCenterPosition(selectedObservableCenter)
+        }
+    }, [activeObservable])
 
     if (useObservables) {
         return (
             <div className="map-section-container">
-                <Map center={position} zoom={8}>
+                <Map center={useCenterPosition} zoom={zoomLevel}>
+                    {/* mapbox tyles style */}
                     <WMSTileLayer
                         url={`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapBoxAccessToken}`}
                         id="mapbox/satellite-v9"
@@ -28,33 +50,30 @@ const MapSection = (props) => {
                         tileSize={512}
                         zoomOffset={-1}
                     />
-                    {useObservables && useObservables.features.map((observation, i) => {
-                        if (i <= 100) {
-                            const { properties } = observation;
-                            const date = timeConverter(properties.observed_on);
+                    {observations && observations.map((observation, i) => {
+                        // if (i <= 100) {
+                        const { properties } = observation;
+                        const date = timeConverter(properties.observed_on);
+                        const coords = convertToLatLng(observation.geometry.coordinates, 1) // https://macwright.com/lonlat/
 
-                            const reverseLatLng = observation.geometry.coordinates.map(coordinate => {
-                                return coordinate.map(coord => coord.reverse());
-                            });
-
-                            if (reverseLatLng) {
-                                return (
-                                    <Polygon
-                                        key={observation.properties.description}
-                                        color={activeObservable === i ? 'red' : 'blue'}
-                                        id={i}
-                                        positions={reverseLatLng}
-                                        onclick={() => setObservable(i)}
-                                    >
-                                        <Popup className="map-observation-popup">
-                                            <p className="description">{properties.description}</p>
-                                            <p className="sensor">Sensor: {properties.sensor}</p>
-                                            <p className="observed">Observed on: {date}</p>
-                                        </Popup>
-                                    </Polygon>
-                                )
-                            }
+                        if (coords) {
+                            return (
+                                <Polygon
+                                    key={observation.properties.description}
+                                    color={activeObservable === i ? 'red' : 'blue'}
+                                    id={i}
+                                    positions={coords}
+                                    onclick={() => setObservable(i)}
+                                >
+                                    <Popup className="map-observation-popup">
+                                        <p className="description">{properties.description}</p>
+                                        <p className="sensor">Sensor: {properties.sensor}</p>
+                                        <p className="observed">Observed on: {date}</p>
+                                    </Popup>
+                                </Polygon>
+                            )
                         }
+                        // }
                         return false;
                     })}
                 </Map>

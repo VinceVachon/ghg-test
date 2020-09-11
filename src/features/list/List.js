@@ -25,19 +25,19 @@ const ListSection = (props) => {
         <div className="list-section-container">
             <h1>Observations</h1>
 
-            {observations && observations.features.map((observation, i) => {
-                if (i <= 100) {
-                    const { properties } = observation;
-                    const date = timeConverter(properties.observed_on);
+            {observations && observations.map((observation, i) => {
+                // if (i <= 100) {
+                const { properties } = observation;
+                const date = timeConverter(properties.observed_on);
 
-                    return (
-                        <div onClick={() => setObservable(i)} key={observation.properties.description} id={`observable-id-${i}`} className={`list-item-content ${activeObservable === i ? 'active' : ''}`}>
-                            <p className="description">{properties.description}</p>
-                            <p className="sensor">Sensor: {properties.sensor}</p>
-                            <p className="observed">Observed on: {date}</p>
-                        </div>
-                    )
-                }
+                return (
+                    <div onClick={() => setObservable(i)} key={observation.properties.description} id={`observable-id-${i}`} className={`list-item-content ${activeObservable === i ? 'active' : ''}`}>
+                        <p className="description">{properties.description}</p>
+                        <p className="sensor">Sensor: {properties.sensor}</p>
+                        <p className="observed">Observed on: {date}</p>
+                    </div>
+                )
+                // }
             })}
         </div>
     );
